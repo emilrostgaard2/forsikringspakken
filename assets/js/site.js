@@ -5,7 +5,7 @@ var kr=function(n){return Math.round(n).toLocaleString("da-DK")};
 
 /* Navigation */
 var burger=$(".burger"),nav=$(".nav");
-if(burger){burger.addEventListener("click",function(){var o=burger.getAttribute("aria-expanded")==="true";burger.setAttribute("aria-expanded",!o);nav.classList.toggle("open",!o);d.body.style.overflow=o?"":"hidden"})}
+if(burger){burger.addEventListener("click",function(){var o=burger.getAttribute("aria-expanded")==="true";nav.style.top=$(".hdr").getBoundingClientRect().bottom+"px";burger.setAttribute("aria-expanded",!o);nav.classList.toggle("open",!o);d.body.classList.toggle("menu-open",!o)})}
 $$(".dd").forEach(function(b){var m=b.nextElementSibling;b.addEventListener("click",function(e){e.stopPropagation();var o=b.getAttribute("aria-expanded")==="true";$$(".dd").forEach(function(x){x.setAttribute("aria-expanded","false");x.nextElementSibling.classList.remove("open")});if(!o){b.setAttribute("aria-expanded","true");m.classList.add("open")}})});
 d.addEventListener("click",function(){$$(".dd").forEach(function(x){x.setAttribute("aria-expanded","false");x.nextElementSibling.classList.remove("open")})});
 d.addEventListener("keydown",function(e){if(e.key==="Escape")d.dispatchEvent(new Event("click"))});
