@@ -36,10 +36,16 @@ if(calc){var boxes=$$("input[type=checkbox]",calc);
   $("#c-msg",calc).textContent=sel.length===0?"Vælg de forsikringer, du har i dag.":sel.length===1?"Vælg én mere for at se samlerabatten.":"Få tilbud på hele pakken og se den reelle pris.";}
  boxes.forEach(function(b){b.addEventListener("change",upd)});upd()}
 
+/* Hero starter */
+var st=$("#starter");
+if(st){var tb=$$("input",st);function su(){var n=tb.filter(function(b){return b.checked}).length,t=$("#st-note",st);
+ t.innerHTML=n===0?"Vælg en eller flere forsikringer":n===1?"1 valgt. Vælg én mere og få <b>mulig samlerabat</b>":n+" valgt. Mulig samlerabat: <b>op til "+(n>=5?25:n===4?20:n===3?15:10)+" %</b>";}
+ tb.forEach(function(b){b.addEventListener("change",su)});su()}
+
 /* Behovsquiz */
 var quiz=$("#behovsquiz");
 if(quiz){var qs=$$(".quiz-q",quiz),ans={},step=0;
- function show(n){qs.forEach(function(q,i){q.classList.toggle("on",i===n)})}
+ function show(n){qs.forEach(function(q,i){q.classList.toggle("on",i===n)});var qb=$(".quiz-bar b",quiz);if(qb)qb.style.width=Math.min(100,(n+1)/(qs.length-1)*100)+"%"}
  $$(".quiz-opts button",quiz).forEach(function(b){b.addEventListener("click",function(){ans[b.closest(".quiz-q").getAttribute("data-k")]=b.getAttribute("data-v");step++;if(step<qs.length-1)show(step);else{result();show(qs.length-1)}})});
  function item(name,url,tag,why){return'<li><b><a href="'+url+'">'+name+'</a></b><span>'+(tag==="must"?'<span class="tag must">Lovpligtig</span> ':tag==="rec"?'<span class="tag">Anbefales</span> ':'<span class="tag" style="background:#EEF2FA;color:#2B3A55">Overvej</span> ')+why+'</span></li>'}
  function result(){var h="",n=0;
