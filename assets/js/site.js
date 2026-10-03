@@ -42,6 +42,9 @@ if(st){var tb=$$("input",st);function su(){var n=tb.filter(function(b){return b.
  t.innerHTML=n===0?"Vælg en eller flere forsikringer":n===1?"1 valgt. Vælg én mere og få <b>mulig samlerabat</b>":n+" valgt. Mulig samlerabat: <b>op til "+(n>=5?25:n===4?20:n===3?15:10)+" %</b>";}
  tb.forEach(function(b){b.addEventListener("change",su)});su()}
 
+/* Bundle chips on guides */
+$$("[data-bundle]").forEach(function(bd){var bx=$$("input",bd),note=$(".bnote",bd);function u(){var n=bx.filter(function(b){return b.checked}).length;note.innerHTML=n<2?"Vælg flere forsikringer for at se din mulige samlerabat.":n+" forsikringer i pakken. Mulig samlerabat: <b>op til "+(n>=5?25:n===4?20:n===3?15:10)+" %</b>"}bx.forEach(function(b){b.addEventListener("change",u)});u()});
+
 /* Behovsquiz */
 var quiz=$("#behovsquiz");
 if(quiz){var qs=$$(".quiz-q",quiz),ans={},step=0;
@@ -60,6 +63,28 @@ if(quiz){var qs=$$(".quiz-q",quiz),ans={},step=0;
   if(ans.born==="ja"){h+=item("Livsforsikring","/livsforsikring/","rec","Sikrer familien økonomisk, hvis det værste sker.");n++}
   $("#q-list",quiz).innerHTML=h;$("#q-n",quiz).textContent=n}
  $("#q-reset",quiz).addEventListener("click",function(){ans={};step=0;show(0)})}
+
+/* Selvrisiko-beregner */
+var sr=$("#srcalc");
+if(sr){var g=function(i){return parseFloat($("#"+i,sr).value)||0};function su2(){var save=g("sr-p1")-g("sr-p2"),extra=g("sr-s2")-g("sr-s1"),f=parseFloat($("#sr-f",sr).value),net=save-f*extra;
+ $("#sr-save",sr).textContent=kr(save)+" kr./år";
+ $("#sr-be",sr).textContent=extra>0&&save>0?"Break-even: én skade hvert "+(extra/save).toFixed(1).replace(".",",")+". år":"Indtast to forskellige selvrisici og priser";
+ $("#sr-verdict",sr).innerHTML=save<=0||extra<=0?"":(net>0?"<b>Høj selvrisiko kan betale sig.</b> Forventet gevinst ca. "+kr(net)+" kr. om året.":"<b>Lav selvrisiko er billigst for dig.</b> Forventet merudgift ca. "+kr(-net)+" kr. om året ved høj selvrisiko.")}
+ $$("input,select",sr).forEach(function(e){e.addEventListener("input",su2)});su2()}
+
+/* Kasko-beregner */
+var ka=$("#kacalc");
+if(ka){var gk=function(i){return parseFloat($("#"+i,ka).value)||0};function ku(){var v=gk("ka-v"),p=gk("ka-p"),s=gk("ka-s"),l=$("#ka-l",ka).value==="1",mx=Math.max(0,v-s),r=p>0?mx/p:0;
+ $("#ka-max",ka).textContent=kr(mx)+" kr.";$("#ka-ratio",ka).textContent=p>0?"Svarer til "+r.toFixed(1).replace(".",",")+" års kaskopræmie":"";
+ $("#ka-verdict",ka).textContent=l?"Behold kasko: lån og leasing kræver det næsten altid.":r<4?"Overvej at droppe kasko eller vælge delkasko.":r<8?"Grænsetilfælde: afhænger af din opsparing.":"Behold kasko: den kan betale sig for din bil."}
+ $$("input,select",ka).forEach(function(e){e.addEventListener("input",ku)});ku()}
+
+/* Opsigelsesbrev */
+var op=$("#opsig");
+if(op){function ou(){var v=function(i){return $("#"+i,op).value.trim()},n=v("op-n")||"[Dit navn]",a=v("op-a")||"[Din adresse]",c=v("op-c")||"[Forsikringsselskab]",t=v("op-t"),p=v("op-p")||"[policenummer]",d=v("op-d"),dt=new Date().toLocaleDateString("da-DK",{day:"numeric",month:"long",year:"numeric"});
+ $("#op-out",op).value=n+"\n"+a+"\n\n"+dt+"\n\nTil "+c+"\n\nOpsigelse af "+t+", policenummer "+p+"\n\nJeg opsiger hermed min "+t+" med policenummer "+p+" "+(d==="hf"?"til ophør ved næste hovedforfald.":"til ophør hurtigst muligt i henhold til opsigelsesvarslet i mine forsikringsbetingelser.")+"\n\nJeg beder om en skriftlig bekræftelse på opsigelsen med angivelse af ophørsdato, samt tilbagebetaling af eventuel forudbetalt præmie for perioden efter ophør.\n\nVenlig hilsen\n\n"+n}
+ $$("input,select",op).forEach(function(e){e.addEventListener("input",ou)});ou();
+ $("#op-copy",op).addEventListener("click",function(){var t=$("#op-out",op);t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand("copy")}this.textContent="Kopieret"})}
 
 /* Prisestimator */
 $$(".est").forEach(function(e){var cfg=JSON.parse(e.getAttribute("data-cfg")),sels=$$("select",e);
