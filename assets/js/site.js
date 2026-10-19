@@ -93,3 +93,6 @@ $$(".est").forEach(function(e){var cfg=JSON.parse(e.getAttribute("data-cfg")),se
   $(".v",e).textContent=kr(rd(lo/12))+"–"+kr(rd(hi/12))+" kr./md.";$(".y",e).textContent="ca. "+kr(rd(lo))+"–"+kr(rd(hi))+" kr. om året"}
  sels.forEach(function(s){s.addEventListener("change",upd)});upd()});
 })();
+
+/* Starter: link til valgt kategori hos Sammenligner.dk */
+(function(){var s=document.getElementById("starter"),g=document.getElementById("st-go");if(!s||!g)return;var d=g.getAttribute("href");s.addEventListener("change",function(){var c=s.querySelector("input[data-sg]:checked");g.setAttribute("href",c?c.getAttribute("data-sg"):d)})})();
